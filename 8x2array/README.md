@@ -16,4 +16,5 @@
 
 ### 例
 - [これ](/8x2array/json/cal_20211206_14_ch8.json)がこう
-![ex](/docs/images/example_fitted.png)
+
+    ![ex](/docs/images/example_fitted.png)
