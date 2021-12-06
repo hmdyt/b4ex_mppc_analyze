@@ -1,0 +1,9 @@
+{
+    "root_file_path": "/data/hamada/easiroc_data/cal_20211206_14.root",
+    "target_channel": 9,
+    "initial_photon_num": 1,
+    "peak_search_range": [770, 1700],
+    "fitting_range": [880, 1350],
+    "showing_range": [750, 1550],
+    "image_save_path": "8x2array/img/cal_20211206_14/ch9/"
+}
