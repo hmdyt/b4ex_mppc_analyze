@@ -42,11 +42,12 @@ def getFittedParams(
     hist,
     peak_search_range = (0, 1500),
     fitting_range = (0, 1500),
-    showing_range = (0, 1500)
+    showing_range = (0, 1500),
+    peak_search_sigma = 10
 ):
     # peak search
     hist.GetXaxis().SetRangeUser(*peak_search_range)
-    n_peaks, x_peaks, y_peaks = searchPeaks(hist, 20)
+    n_peaks, x_peaks, y_peaks = searchPeaks(hist, 20, peak_search_sigma)
     multi_gauss_str = getMultiGaussString(n_peaks)
 
     # fitting
@@ -79,6 +80,7 @@ def getCalibrationParams(
     # fetch json, hist
     settings = json.load(open(json_file_path))
     title = settings["root_file_path"] + " " + str(settings["target_channel"])
+    peak_search_sigma = settings.get("peak_search_sigma", 10)
     hist = getHistMPPC(settings["root_file_path"], settings["target_channel"])
 
     # prepare dir
@@ -90,6 +92,7 @@ def getCalibrationParams(
         settings["peak_search_range"],
         settings["fitting_range"],
         settings["showing_range"],
+        peak_search_sigma
     )
 
     # init graph
