@@ -59,7 +59,7 @@ def getFittedParams(
         f_fit.SetParName(3*i + 2, str(i) + "th sigma")
         f_fit.SetParameter(3*i + 0, y_peaks[i])
         f_fit.SetParameter(3*i + 1, x_peaks[i])
-        f_fit.SetParameter(3*i + 2, 20)
+        f_fit.SetParameter(3*i + 2, 5)
         f_fit.SetParLimits(3*i + 0, 0, 10**6)
         f_fit.SetParLimits(3*1 + 2, 0, 100)
     hist.Fit(f_fit, "R")
