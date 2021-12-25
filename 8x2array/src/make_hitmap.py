@@ -26,13 +26,15 @@ def fetch_calibration_functions():
     # fetch calb parameters
     # calb_paras = {ch: [a, b]}
     # ADC = a * N_photon + b
+    calibration_parameters = dict()
     calibration_functions = dict()
     for up_down in ["downside", "upside"]:
         for ch in channels[up_down]:
             a, b = util.getCalibrationParams("8x2array/json/" + json_names[up_down].format(ch))
             f = lambda x: (x - b) / a
+            calibration_parameters[ch] = (a, b)
             calibration_functions[ch] = f
-    return calibration_functions, channels
+    return calibration_parameters, calibration_functions, channels
 
 def is_scintillated(photon_number, threshold_photon_number):
     return float(photon_number > threshold_photon_number)
@@ -40,7 +42,7 @@ def is_scintillated(photon_number, threshold_photon_number):
 def main():
     THRESHOLD = int(sys.argv[1])
     
-    calibration_functions, channels = fetch_calibration_functions()
+    _, calibration_functions, channels = fetch_calibration_functions()
     
     # cosmic ray mesurement file
     target_file = "/data/hamada/easiroc_data/test_20211207_2_*.root"
