@@ -182,3 +182,4 @@ cython_debug/
 
 # preferences
 8x2array/img/
+**/img_*
