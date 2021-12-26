@@ -43,8 +43,15 @@ class CalibrationData:
             (xmin, xmax),
             peak_search_sigma
         )
+        # set to member variable & save hist as image
         self._fitted_adc_means[ch] = ret_adc_means
         self._fitted_adc_mean_errors[ch] = ret_adc_mean_errors
+        self.save_hist_as_png(ch)
+
+    def save_hist_as_png(self, ch):
+        canvas = r.TCanvas()
+        self._hists_VadcHigh[ch].Draw()
+        canvas.SaveAs("{0}/{1}/hist.png".format(self._image_dir_path, ch))
 
 
 class CalibrationDatas:
@@ -151,4 +158,4 @@ class CalibrationDatas:
         for HV in self._HVs:
             os.makedirs(self._calbDatas[HV]._image_dir_path, exist_ok=True)
             for i in range(64):
-                os.makedirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i))
+                os.makedirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i), exist_ok=True)
