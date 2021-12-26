@@ -2,6 +2,7 @@ from typing import List, Dict
 import ROOT as r
 from tqdm import tqdm
 from . import calibrationUtils as util
+import os
 
 
 class CalibrationData:
@@ -64,6 +65,7 @@ class CalibrationDatas:
         self._HVs.append(HV)
         self._calb_line_TCanvases[HV] = [None for _ in range(64)]
         self._calb_line_TF1s[HV] = [None for _ in range(64)]
+        self.make_dirs()
 
     def get_calb_data(self, HV: str) -> CalibrationData:
         return self._calbDatas[HV]
@@ -145,4 +147,8 @@ class CalibrationDatas:
         self._HV_one_photon_TGraphs[ch] = graph
         self._HV_one_photon_TF1s = f_fit
 
-    def
+    def make_dirs(self):
+        for HV in self._HVs:
+            os.makedirs(self._calbDatas[HV]._image_dir_path, exist_ok=True)
+            for i in range(64):
+                os.mkdirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i))
