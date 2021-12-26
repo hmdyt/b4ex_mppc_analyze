@@ -110,11 +110,21 @@ class CalibrationDatas:
         axis.SetStats(0)
 
         # draw to canvas
-        canvas = r.TCancas()
+        canvas = r.TCanvas()
         axis.Draw("AXIS")
         graph.Draw("P SAME")
+
+        # set to member function & save canvas as png
         self._calb_line_TCanvases[HV][ch] = canvas
         self._calb_line_TF1s[HV][ch] = f_fit
+        self.save_calb_line_TCanvas(HV, ch)
+
+    def save_calb_line_TCanvas(self, HV, ch):
+        save_str = "{0}/{1}/graph_photon_adc.png".format(
+            self._calbDatas[HV]._image_dir_path,
+            ch
+        )
+        self._calb_line_TCanvases[HV][ch].SaveAs(save_str)
 
     def fit_HV_one_photon(self, ch):
         # fetch graph attr
