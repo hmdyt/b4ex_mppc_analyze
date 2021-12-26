@@ -56,7 +56,7 @@ def getFittedParams(
 ):
     # peak search
     hist.GetXaxis().SetRangeUser(*peak_search_range)
-    n_peaks, x_peaks, y_peaks = searchPeaks(hist, 20, peak_search_sigma)
+    n_peaks, x_peaks, y_peaks = searchPeaks(hist, 100, peak_search_sigma)
     multi_gauss_str = getMultiGaussString(n_peaks)
 
     # fitting
