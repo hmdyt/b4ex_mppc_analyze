@@ -71,9 +71,8 @@ class CalibrationDatas:
     def __init__(self) -> None:
         pass
 
-    def set_calb_data(self, img_dir_path: str, HV: float) -> None:
-        calbData: CalibrationData = CalibrationData(img_dir_path, HV)
-        self._calbDatas[HV] = calbData
+    def set_calb_data(self, img_dir_path: str, HV: str) -> None:
+        self._calbDatas[HV] = CalibrationData(img_dir_path, HV)
         self._HVs.append(HV)
         self._calb_line_TCanvases[HV] = [None for _ in range(64)]
         self._calb_line_TF1s[HV] = [None for _ in range(64)]
@@ -146,14 +145,13 @@ class CalibrationDatas:
         one_photon_adc_widthes = []
         one_photon_adc_width_errors = []
         for HV in self._HVs:
-            HV = float(HV)
-            HVs.append(HV)
+            HVs.append(float(HV))
             one_photon_adc_widthes.append(
-                self._calb_line_TF1s[ch].GetParameter(0)
+                self._calb_line_TF1s[HV][ch].GetParameter(0)
             )
             HV_errors.append(0)
             one_photon_adc_width_errors.append(
-                self._calb_line_TF1s[ch].GetParError(0)
+                self._calb_line_TF1s[HV][ch].GetParError(0)
             )
 
         # init graph
@@ -182,7 +180,7 @@ class CalibrationDatas:
         canvas = r.TCanvas()
         self._HV_one_photon_TGraphs[ch].Draw("AP")
         for HV in self._HVs:
-            canvas.SaveAs(save_str.format(HV, ch))
+            canvas.SaveAs(save_str.format(self._calbDatas[HV]._image_dir_path, ch))
 
     def make_dirs(self):
         for HV in self._HVs:
