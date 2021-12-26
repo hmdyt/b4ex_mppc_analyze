@@ -63,6 +63,10 @@ class CalibrationDatas:
     _calb_line_TCanvases: Dict[str, List[r.TCanvas]] = {}
     _HV_one_photon_TGraphs: List[r.TGraphErrors] = [None for _ in range(64)]
     _HV_one_photon_TF1s: List[r.TF1] = [None for _ in range(64)]
+    _pedestal_data_path: str = None
+    _pedestal_adc_means: List[float] = [None for _ in range(64)]
+    _pedestal_adc_mean_errors: List[float] = [None for _ in range(64)]
+    _initial_photon_number_s: Dict[str, List[int]] = {}
 
     def __init__(self) -> None:
         pass
@@ -73,6 +77,7 @@ class CalibrationDatas:
         self._HVs.append(HV)
         self._calb_line_TCanvases[HV] = [None for _ in range(64)]
         self._calb_line_TF1s[HV] = [None for _ in range(64)]
+        self._initial_photon_number_s[HV] = [None for _ in range(64)]
         self.make_dirs()
 
     def get_calb_data(self, HV: str) -> CalibrationData:
@@ -178,3 +183,25 @@ class CalibrationDatas:
             os.makedirs(self._calbDatas[HV]._image_dir_path, exist_ok=True)
             for i in range(64):
                 os.makedirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i), exist_ok=True)
+
+    def set_pedestal_data(self, pedestal_data_path):
+        self._pedestal_data_path = pedestal_data_path
+        hists = [util.getHistMPPC(self._pedestal_data_path, ch) for ch in range(64)]
+        funcs = [r.TF1("", "gaus", 0, 4096) for _ in range(64)]
+        for ch in range(64):
+            hists[ch].Fit(funcs[ch], "R")
+            self._pedestal_adc_means[ch] = funcs[ch].GetParameter(1)
+            self._pedestal_adc_mean_errors[ch] = funcs[ch].GetParError(1)
+
+    def determine_initial_photon_number(self, HV, ch):
+        fitted_means = self._calbDatas[HV]._fitted_adc_means[ch]
+        pedestal_mean = self._pedestal_adc_means[ch]
+        diff_ped_to_ini = fitted_means[0] - pedestal_mean
+        aprox_width = fitted_means[1] - fitted_means[0]
+        initial_photon_number = int(diff_ped_to_ini / aprox_width)
+        self._initial_photon_number_s[HV][ch] = initial_photon_number
+
+    def determine_all_initial_photon_number(self):
+        for HV in self._HVs:
+            for ch in range(64):
+                self.determine_initial_photon_number(HV, ch)
