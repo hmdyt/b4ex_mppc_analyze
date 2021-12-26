@@ -125,6 +125,12 @@ class CalibrationDatas:
         self._calb_line_TF1s[HV][ch] = f_fit
         self.save_calb_line_TCanvas(HV, ch)
 
+    def fit_all_adc_nphoton_line(self):
+        for HV in self._HVs:
+            for ch in range(64):
+                initial_photon_num = self._initial_photon_number_s[HV][ch]
+                self.fit_adc_nphoton_line(HV, ch, initial_photon_num)
+
     def save_calb_line_TCanvas(self, HV, ch):
         save_str = "{0}/{1}/graph_photon_adc.png".format(
             self._calbDatas[HV]._image_dir_path,
@@ -198,7 +204,7 @@ class CalibrationDatas:
         pedestal_mean = self._pedestal_adc_means[ch]
         diff_ped_to_ini = fitted_means[0] - pedestal_mean
         aprox_width = fitted_means[1] - fitted_means[0]
-        initial_photon_number = int(diff_ped_to_ini / aprox_width)
+        initial_photon_number = round(diff_ped_to_ini / aprox_width)
         self._initial_photon_number_s[HV][ch] = initial_photon_number
 
     def determine_all_initial_photon_number(self):
