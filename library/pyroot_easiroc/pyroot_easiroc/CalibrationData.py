@@ -18,6 +18,7 @@ class CalibrationData:
 
     def set_hist(self, detector_ch: int, cal_root_file_path: str, cal_ch: int) -> None:
         hist = util.getHistMPPC(cal_root_file_path, cal_ch)
+        hist.SetTitle("{0} [{1}ch];ADC;Events".format(cal_root_file_path.split('/')[-1], detector_ch))
         self._hists_VadcHigh[detector_ch] = hist
 
     def fit_multi_gaus(
