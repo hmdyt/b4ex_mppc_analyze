@@ -151,4 +151,4 @@ class CalibrationDatas:
         for HV in self._HVs:
             os.makedirs(self._calbDatas[HV]._image_dir_path, exist_ok=True)
             for i in range(64):
-                os.mkdirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i))
+                os.makedirs("{0}/{1}".format(self._calbDatas[HV]._image_dir_path, i))
