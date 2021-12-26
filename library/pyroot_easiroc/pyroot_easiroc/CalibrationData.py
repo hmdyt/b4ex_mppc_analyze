@@ -161,9 +161,17 @@ class CalibrationDatas:
         f_fit = r.TF1("f_liner", "[0]*x + [1]", 0, 20)
         graph.Fit(f_fit, "R")
 
-        # set to class member variable
+        # set to class member variable & save graph as png
         self._HV_one_photon_TGraphs[ch] = graph
         self._HV_one_photon_TF1s = f_fit
+        self.save_HV_one_photon_TGraph(ch)
+
+    def save_HV_one_photon_TGraph(self, ch):
+        save_str = "{0}/{1}/HV_one_photon_TGraph.png"
+        canvas = r.TCanvas()
+        self._HV_one_photon_TGraphs[ch].Draw("AP")
+        for HV in self._HVs:
+            canvas.SaveAs(save_str.format(HV, ch))
 
     def make_dirs(self):
         for HV in self._HVs:
