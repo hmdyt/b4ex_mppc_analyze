@@ -118,6 +118,7 @@ class CalibrationDatas:
 
         # set to member function & save canvas as png
         self._calb_line_TCanvases[HV][ch] = canvas
+        self._calb_line_TGraphs[HV][ch] = graph
         self._calb_line_TF1s[HV][ch] = f_fit
         self.save_calb_line_TCanvas(HV, ch)
 
@@ -164,7 +165,7 @@ class CalibrationDatas:
         graph.SetMarkerSize(1)
 
         # init liner function for fitting and fit
-        f_fit = r.TF1("f_liner", "[0]*x + [1]", 0, 20)
+        f_fit = r.TF1("f_liner", "[0]*x + [1]", 0, 60)
         graph.Fit(f_fit, "R")
 
         # set to class member variable & save graph as png
@@ -212,3 +213,8 @@ class CalibrationDatas:
             print("========== {}V ==========".format(HV))
             for ch in range(64):
                 print(self._calb_line_TF1s[HV][ch].Eval(0))
+
+    def get_HV_from_one_photon(self, ch, one_photon_width) -> float:
+        a = self._HV_one_photon_TF1s[ch].GetParameter(0)
+        b = self._HV_one_photon_TF1s[ch].GetParameter(1)
+        return (one_photon_width - b) / a
