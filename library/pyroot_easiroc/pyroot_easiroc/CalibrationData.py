@@ -72,6 +72,7 @@ class CalibrationDatas:
         self._calbDatas[HV] = CalibrationData(img_dir_path, HV)
         self._HVs.append(HV)
         self._calb_line_TCanvases[HV] = [None for _ in range(64)]
+        self._calb_line_TGraphs[HV] = [None for _ in range(64)]
         self._calb_line_TF1s[HV] = [None for _ in range(64)]
         self._initial_photon_number_s[HV] = [None for _ in range(64)]
         self.make_dirs()
