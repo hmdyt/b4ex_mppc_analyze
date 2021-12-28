@@ -6,15 +6,13 @@ import os
 
 
 class CalibrationData:
-    _HV: str = None
-    _image_dir_path: str = ""
-    _hists_VadcHigh: List[r.TH1D] = [None for _ in range(64)]
-    _fitted_adc_means: List[List[float]] = [None for _ in range(64)]
-    _fitted_adc_mean_errors: List[List[float]] = [None for _ in range(64)]
 
     def __init__(self, image_dir_path: str, MPPC_high_voltage: str) -> None:
-        self._image_dir_path = image_dir_path
-        self._HV = MPPC_high_voltage
+        self._image_dir_path: str = image_dir_path
+        self._HV: str = MPPC_high_voltage
+        self._hists_VadcHigh: List[r.TH1D] = [None for _ in range(64)]
+        self._fitted_adc_means: List[List[float]] = [None for _ in range(64)]
+        self._fitted_adc_mean_errors: List[List[float]] = [None for _ in range(64)]
 
     def set_hist(self, detector_ch: int, cal_root_file_path: str, cal_ch: int) -> None:
         hist = util.getHistMPPC(cal_root_file_path, cal_ch)
@@ -56,20 +54,19 @@ class CalibrationData:
 
 
 class CalibrationDatas:
-    _calbDatas: Dict[str, CalibrationData] = {}
-    _HVs: List[str] = []
-    _calb_line_TGraphs: Dict[str, List[r.TGraphErrors]] = {}
-    _calb_line_TF1s: Dict[str, List[r.TF1]] = {}
-    _calb_line_TCanvases: Dict[str, List[r.TCanvas]] = {}
-    _HV_one_photon_TGraphs: List[r.TGraphErrors] = [None for _ in range(64)]
-    _HV_one_photon_TF1s: List[r.TF1] = [None for _ in range(64)]
-    _pedestal_data_path: str = None
-    _pedestal_adc_means: List[float] = [None for _ in range(64)]
-    _pedestal_adc_mean_errors: List[float] = [None for _ in range(64)]
-    _initial_photon_number_s: Dict[str, List[int]] = {}
 
     def __init__(self) -> None:
-        pass
+        self._calbDatas: Dict[str, CalibrationData] = {}
+        self._HVs: List[str] = []
+        self._calb_line_TGraphs: Dict[str, List[r.TGraphErrors]] = {}
+        self._calb_line_TF1s: Dict[str, List[r.TF1]] = {}
+        self._calb_line_TCanvases: Dict[str, List[r.TCanvas]] = {}
+        self._HV_one_photon_TGraphs: List[r.TGraphErrors] = [None for _ in range(64)]
+        self._HV_one_photon_TF1s: List[r.TF1] = [None for _ in range(64)]
+        self._pedestal_data_path: str = None
+        self._pedestal_adc_means: List[float] = [None for _ in range(64)]
+        self._pedestal_adc_mean_errors: List[float] = [None for _ in range(64)]
+        self._initial_photon_number_s: Dict[str, List[int]] = {}
 
     def set_calb_data(self, img_dir_path: str, HV: str) -> None:
         self._calbDatas[HV] = CalibrationData(img_dir_path, HV)
