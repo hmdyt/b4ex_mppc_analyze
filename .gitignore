@@ -180,6 +180,9 @@ cython_debug/
 # vscode
 .vscode
 
+# pickle
+*.pickle
+
 # preferences
 8x2array/img/
 **/img_*
