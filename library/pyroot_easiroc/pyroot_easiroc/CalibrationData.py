@@ -219,3 +219,21 @@ class CalibrationDatas:
         a = self._HV_one_photon_TF1s[ch].GetParameter(0)
         b = self._HV_one_photon_TF1s[ch].GetParameter(1)
         return (one_photon_width - b) / a
+
+    def make_yml_InputDAC(self, target_width) -> None:
+        HV_target_s = [self.get_HV_from_one_photon(ch, target_width) for ch in range(64)]
+        HV_ref = HV_target_s[0]
+        HV_diff_s = [HV_ref - HV for HV in HV_target_s]
+        DAC_bit_s = [256 + 128 + int(HV_diff / (4.5/256)) for HV_diff in HV_diff_s]
+        out_str = "---\n"
+        out_str += "EASIROC1:\n"
+        out_str += "  Input 8-bit DAC:\n"
+        for ch in range(0, 32):
+            out_str += "  - {}\n".format(DAC_bit_s[ch])
+        out_str += "EASIROC2:\n"
+        out_str += "  Input 8-bit DAC:\n"
+        for ch in range(32, 64):
+            out_str += "  - {}\n".format(DAC_bit_s[ch])
+
+        with open("InputDAC.yaml", 'w') as f:
+            f.write(out_str)
