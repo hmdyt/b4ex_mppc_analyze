@@ -169,7 +169,7 @@ class CalibrationDatas:
 
         # set to class member variable & save graph as png
         self._HV_one_photon_TGraphs[ch] = graph
-        self._HV_one_photon_TF1s = f_fit
+        self._HV_one_photon_TF1s[ch] = f_fit
         self.save_HV_one_photon_TGraph(ch)
 
     def save_HV_one_photon_TGraph(self, ch):
@@ -206,3 +206,9 @@ class CalibrationDatas:
         for HV in self._HVs:
             for ch in range(64):
                 self.determine_initial_photon_number(HV, ch)
+
+    def print_fitted_pedestal(self):
+        for HV in self._HVs:
+            print("========== {}V ==========".format(HV))
+            for ch in range(64):
+                print(self._calb_line_TF1s[HV][ch].Eval(0))
