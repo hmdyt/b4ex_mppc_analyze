@@ -225,7 +225,8 @@ class CalibrationDatas:
         HV_ref = HV_target_s[0]
         HV_diff_s = [HV_ref - HV for HV in HV_target_s]
         DAC_bit_s = [256 + 128 + int(HV_diff / (4.5/256)) for HV_diff in HV_diff_s]
-        out_str = "---\n"
+        out_str = "# setHV {}\n".format(HV_ref)
+        out_str += "---\n"
         out_str += "EASIROC1:\n"
         out_str += "  Input 8-bit DAC:\n"
         for ch in range(0, 32):
@@ -235,5 +236,5 @@ class CalibrationDatas:
         for ch in range(32, 64):
             out_str += "  - {}\n".format(DAC_bit_s[ch])
 
-        with open("InputDAC.yaml", 'w') as f:
+        with open("InputDAC.yml", 'w') as f:
             f.write(out_str)
