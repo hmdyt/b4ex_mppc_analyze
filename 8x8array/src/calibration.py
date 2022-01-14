@@ -1,5 +1,6 @@
 from pyroot_easiroc import CalibrationData
 import ROOT as r
+import pickle
 r.gROOT.SetBatch()
 
 cds = CalibrationData.CalibrationDatas()
@@ -268,7 +269,7 @@ cds.get_calb_data("52.9").fit_multi_gaus(
 cds.get_calb_data("52.9").fit_multi_gaus(
     31,
     peak_search_range=(0, 2500),
-    fitting_range=(800,1170),
+    fitting_range=(800, 1170),
     peak_search_sigma=10
 )
 cds.get_calb_data("52.9").fit_multi_gaus(
@@ -1386,3 +1387,15 @@ cds.get_calb_data("53.3").fit_multi_gaus(
     fitting_range=(800, 1350),
     peak_search_sigma=10
 )
+
+# pedestal data is used to determine initial photon number
+cds.set_pedestal_data("/data/hamada/easiroc_data/test_20211225_11.root")
+# initial photon number is used in adc_nphoton_line graph
+cds.determine_all_initial_photon_number()
+cds.fit_all_adc_nphoton_line()
+for ch in range(64):
+    cds.fit_HV_one_photon(ch)
+
+# save pickle
+with open("cds.pickle", 'wb') as f:
+    pickle.dump(cds, f)

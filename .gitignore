@@ -180,6 +180,12 @@ cython_debug/
 # vscode
 .vscode
 
+# pickle
+*.pickle
+
+# ignore generated file
+**/InputDAC.yaml
+
 # preferences
 8x2array/img/
 **/img_*
