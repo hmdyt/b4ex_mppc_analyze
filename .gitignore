@@ -189,3 +189,16 @@ cython_debug/
 # preferences
 8x2array/img/
 **/img_*
+
+#ignore cal_*
+cal_*
+
+#ignore jpeg, png and html
+*.jpeg
+*.png
+*.html
+
+calibration*
+make_scinti_*
+test.py
+calibrationUtils*
