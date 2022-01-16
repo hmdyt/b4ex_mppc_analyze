@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import ROOT as r
 from tqdm import tqdm
 from . import calibrationUtils as util
@@ -238,3 +238,44 @@ class CalibrationDatas:
 
         with open("InputDAC.yml", 'w') as f:
             f.write(out_str)
+
+    def set_InputDAC_mesurement_data(self, d: Dict[float, List[List[List[float]]]]) -> None:
+        """
+        d[setHV][ch][0] = [DAC_value (256-511)]\n
+        d[setHV][ch][1] = [DAC_voltage]
+        """
+        self._InputDAC_mesurement_data = d
+        os.makedirs("InputDAC_fit", exist_ok=True)
+
+    def set_setHV_to_realHV(self, d: Dict[float, float]) -> None:
+        self._setHV_to_realHV = d
+
+    def fit_InputDAC_vaule_voltage_line(
+        self,
+        setHV: float,
+        ch: int,
+        fit_range: Tuple[float] = (258, 350)
+    ) -> None:
+        n_points = len(self._InputDAC_mesurement_data[setHV][ch][0])
+        MPPC_HVs = [self._setHV_to_realHV[setHV] for _ in range(n_points)]
+        truth_HVs = [
+            MPPC_HV - DAC_V
+            for MPPC_HV, DAC_V in zip(MPPC_HVs, self._InputDAC_mesurement_data[setHV][ch][1])
+        ]
+        g = util.TPGraphErrors(
+            n_points,
+            self._InputDAC_mesurement_data[setHV][ch][0],
+            truth_HVs,
+            [0 for _ in range(n_points)],
+            [0 for _ in range(n_points)]
+        )
+        f = r.TF1(
+            "InputDAC_vaule_voltage_{}_{}".format(setHV, ch),
+            "[0]*x+[1]",
+            fit_range[0],
+            fit_range[1]
+        )
+        c = r.TCanvas()
+        g.Fit(f, "R")
+        g.Draw("AP")
+        c.SaveAs("InputDAC_fit/setHV{0}_ch{1}.png".format(setHV, ch))
