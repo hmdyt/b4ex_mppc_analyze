@@ -41,7 +41,7 @@ void makehistfit (Double_t HV = 52.86){
         Int_t X_MAX = 3500;
         Int_t X_BIN = X_MAX - X_MIN;
         canvas->cd(i+1);
-        TH1D *hist = new TH1D("hist", "ADC", X_BIN, X_MIN, X_MAX);
+        TH1D *hist = new TH1D("hist", Form("ch%d;ADC;event", i), X_BIN, X_MIN, X_MAX);
 
         for(Int_t j = 0; j < N; j++){
             // make hist
