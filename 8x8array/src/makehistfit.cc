@@ -17,7 +17,13 @@ void makehistfit (Double_t HV = 52.86){
     // HV, ch, fit_min, fit_max
     std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fit_range = fitRange();
 
-    TString file_name = "/data/hamada/easiroc_data/run009.root";
+    std::map<double, TString> file_names = {
+        {52.86, TString("/data/hamada/easiroc_data/run009.root")},
+        {52.72, TString("/data/hamada/easiroc_data/run010.root")},
+        {52.96, TString("/data/hamada/easiroc_data/run011.root")}
+    };
+    TString file_name = file_names[HV];
+
     TChain *chain = new TChain("tree");
     chain->Add(file_name);
     chain->SetBranchStatus("*", 0);
