@@ -30,8 +30,8 @@ std::vector<std::vector<std::pair<Double_t, Double_t>>> makeHistFit(){
 
     for (Int_t k = 0; k < 3; k++){
         if (k == 0) HV = 52.86;
-        if (k == 1) HV = 52.72;
-        else HV = 52.96;
+        else if (k == 1) HV = 52.72;
+        else if (k == 2) HV = 52.96;
         
         TString file_name = file_names[HV];
 
@@ -63,14 +63,19 @@ std::vector<std::vector<std::pair<Double_t, Double_t>>> makeHistFit(){
             //　define landau fit
             Int_t fit_MIN = fit_range[HV][i].at(0).first;
             Int_t fit_MAX = fit_range[HV][i].at(0).second;
-            TF1 *func = new TF1("func", "landau", fit_MIN, fit_MAX);
+            if (fit_MIN == 0 || fit_MAX == 0){
+                hist->Draw();
 
-            // draw
-            hist->Draw();
-            hist->Fit(func,"R");
-            fitMPV.at(i).push_back(std::make_pair(HV, func->GetParameter(1)));
+                delete hist;
+            }
+            else{
+                TF1 *func = new TF1("func", "landau", fit_MIN, fit_MAX);
+                hist->Draw();
+                hist->Fit(func, "R");
+                fitMPV.at(i).push_back(std::make_pair(HV, func->GetParameter(1)));
 
-            delete hist;
+                delete hist;
+            }
         }
 
         TString save_file_name = file_name.ReplaceAll(".root", "_fit.png");
