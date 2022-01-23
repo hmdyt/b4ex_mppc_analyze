@@ -34,7 +34,7 @@ def HV_to_DAC(ch, HV):
     return (HV - b2) / a2
 
 
-REFERENCE_CH = 2
+REFERENCE_CH = 0
 
 target_ADC = int(sys.argv[1])
 target_HV = [ADC_to_HV(ch, target_ADC) for ch in range(64)]
@@ -52,8 +52,9 @@ for i in range(64):
 
 
 with open("InputDAC.yml", 'w') as f:
+    f.write("# reference channel {}\n".format(REFERENCE_CH))
     f.write("# targetADC = {}\n".format(target_ADC))
-    f.write("# statusHV {}\n".format(statusHV))
+    f.write("# statusHV {}\n\n".format(statusHV))
     f.write("EASIROC1:\n")
     f.write("    Input 8-bit DAC:\n")
     for i in range(0, 32):
