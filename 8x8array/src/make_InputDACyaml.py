@@ -35,12 +35,18 @@ def HV_to_DAC(ch, HV):
 
 
 REFERENCE_CH = 0
+REFERENCE_CH_DAC = 256 + 64
 
 target_ADC = int(sys.argv[1])
 target_HV = [ADC_to_HV(ch, target_ADC) for ch in range(64)]
-statusHV = target_HV[REFERENCE_CH]
-diff_HV = [target_HV[ch] - statusHV for ch in range(64)]
-diff_HV_DAC = [HV_to_DAC(ch, diff_HV[ch]) for ch in range(64)]
+statusHV = target_HV[REFERENCE_CH] + DAC_to_HV(REFERENCE_CH, REFERENCE_CH_DAC)
+diff_HV = [target_HV[ch] - target_HV[REFERENCE_CH] for ch in range(64)]
+diff_HV_DAC = [-diff_HV[ch] / InputDAC_voltage_dependence[ch][1] + REFERENCE_CH_DAC for ch in range(64)]
+
+# debug output
+for ch in range(64):
+    ans = HV_to_ADC(ch, statusHV - DAC_to_HV(ch, int(diff_HV_DAC[ch])))
+    print(ans)
 
 for i in range(64):
     if diff_HV_DAC[i] < 256:
