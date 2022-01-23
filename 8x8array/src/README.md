@@ -9,6 +9,13 @@
     (InputDAC voltage) = a * (InputDAC value) + b
     ```
 
+## HV_ADC_pol1_list
+- 宇宙線キャリブレーションの結果が書き込まれたファイル
+- ch番号, a, b の順
+    ```
+    (ADC value) = a * (statusHV) + b
+    ```
+
 ## fitMuonCalibration
 - class MuonCalibrationといくつかのテスト用関数が入っている
 ### class MuonCalibration
