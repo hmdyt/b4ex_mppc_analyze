@@ -7,10 +7,10 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
     std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fit_range;
     // run009
     fit_range[HV_run009][0].push_back(make_pair(1200, 3400));
-    fit_range[HV_run009][1].push_back(make_pair(0, 0));
+    fit_range[HV_run009][1].push_back(make_pair(1000, 3500));
     fit_range[HV_run009][2].push_back(make_pair(950, 3500));
     fit_range[HV_run009][3].push_back(make_pair(1200, 3500));
-    fit_range[HV_run009][4].push_back(make_pair(0, 0));
+    fit_range[HV_run009][4].push_back(make_pair(950, 3500));
     fit_range[HV_run009][5].push_back(make_pair(1000, 2700));
     fit_range[HV_run009][6].push_back(make_pair(1200, 3500));
     fit_range[HV_run009][7].push_back(make_pair(1200, 2700));
@@ -25,22 +25,22 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
     fit_range[HV_run009][16].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][17].push_back(make_pair(1500, 3000));
     fit_range[HV_run009][18].push_back(make_pair(1200, 2700));
-    fit_range[HV_run009][19].push_back(make_pair(0, 0));
+    fit_range[HV_run009][19].push_back(make_pair(1500, 3000));
     fit_range[HV_run009][20].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][21].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][22].push_back(make_pair(1200, 2700));
-    fit_range[HV_run009][23].push_back(make_pair(0, 0));
+    fit_range[HV_run009][23].push_back(make_pair(1500, 3000));
     fit_range[HV_run009][24].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][25].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][26].push_back(make_pair(950, 3500));
     fit_range[HV_run009][27].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][28].push_back(make_pair(950, 2700));
     fit_range[HV_run009][29].push_back(make_pair(1200, 2700));
-    fit_range[HV_run009][30].push_back(make_pair(0, 0));
+    fit_range[HV_run009][30].push_back(make_pair(1300, 3000));
     fit_range[HV_run009][31].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][32].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][33].push_back(make_pair(1200, 2700));
-    fit_range[HV_run009][34].push_back(make_pair(0, 0));
+    fit_range[HV_run009][34].push_back(make_pair(1500, 3000));
     fit_range[HV_run009][35].push_back(make_pair(0, 3500));
     fit_range[HV_run009][36].push_back(make_pair(1200, 3000));
     fit_range[HV_run009][37].push_back(make_pair(1000, 3500));
@@ -57,7 +57,7 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
     fit_range[HV_run009][48].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][49].push_back(make_pair(1200, 2700));
     fit_range[HV_run009][50].push_back(make_pair(1200, 2700));
-    fit_range[HV_run009][51].push_back(make_pair(0, 0));
+    fit_range[HV_run009][51].push_back(make_pair(950, 3500));
     fit_range[HV_run009][52].push_back(make_pair(1200, 3000));
     fit_range[HV_run009][53].push_back(make_pair(1200, 3000));
     fit_range[HV_run009][54].push_back(make_pair(1200, 3500));
@@ -73,10 +73,10 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
 
     // run010
     fit_range[HV_run010][0].push_back(make_pair(1100, 3000));
-    fit_range[HV_run010][1].push_back(make_pair(0, 0));
+    fit_range[HV_run010][1].push_back(make_pair(950, 3500));
     fit_range[HV_run010][2].push_back(make_pair(0, 0));
     fit_range[HV_run010][3].push_back(make_pair(1000, 3000));
-    fit_range[HV_run010][4].push_back(make_pair(0, 0));
+    fit_range[HV_run010][4].push_back(make_pair(950, 3500));
     fit_range[HV_run010][5].push_back(make_pair(950, 3000));
     fit_range[HV_run010][6].push_back(make_pair(1100, 3000));
     fit_range[HV_run010][7].push_back(make_pair(1100, 3000));
@@ -123,7 +123,7 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
     fit_range[HV_run010][48].push_back(make_pair(1200, 3000));
     fit_range[HV_run010][49].push_back(make_pair(1000, 3000));
     fit_range[HV_run010][50].push_back(make_pair(1100, 3000));
-    fit_range[HV_run010][51].push_back(make_pair(0, 0));
+    fit_range[HV_run010][51].push_back(make_pair(950, 3500));
     fit_range[HV_run010][52].push_back(make_pair(1100, 3000));
     fit_range[HV_run010][53].push_back(make_pair(1100, 3000));
     fit_range[HV_run010][54].push_back(make_pair(1000, 3000));
@@ -168,7 +168,7 @@ std::map<double, std::map<int, std::vector<std::pair<int, int>>>> fitRange(doubl
     fit_range[HV_run011][27].push_back(make_pair(0, 0));
     fit_range[HV_run011][28].push_back(make_pair(1200, 3000));
     fit_range[HV_run011][29].push_back(make_pair(1200, 3000));
-    fit_range[HV_run011][30].push_back(make_pair(0, 0));
+    fit_range[HV_run011][30].push_back(make_pair(1500, 3000));
     fit_range[HV_run011][31].push_back(make_pair(1200, 3000));
     fit_range[HV_run011][32].push_back(make_pair(1500, 3200));
     fit_range[HV_run011][33].push_back(make_pair(1500, 3200));
