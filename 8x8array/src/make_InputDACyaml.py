@@ -34,9 +34,11 @@ def HV_to_DAC(ch, HV):
     return (HV - b2) / a2
 
 
+REFERENCE_CH = 2
+
 target_ADC = int(sys.argv[1])
 target_HV = [ADC_to_HV(ch, target_ADC) for ch in range(64)]
-statusHV = target_HV[33]
+statusHV = target_HV[REFERENCE_CH]
 diff_HV = [target_HV[ch] - statusHV for ch in range(64)]
 diff_HV_DAC = [HV_to_DAC(ch, diff_HV[ch]) for ch in range(64)]
 
