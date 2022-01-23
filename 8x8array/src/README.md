@@ -8,3 +8,17 @@
     ```
     (InputDAC voltage) = a * (InputDAC value) + b
     ```
+
+## fitMuonCalibration
+- class MuonCalibrationといくつかのテスト用関数が入っている
+### class MuonCalibration
+- コンストラクタ
+    - 測定時のHVと測定ファイルを教える
+    - fit_rangeを呼び出してfittingに用いるパラメータを読み込む
+- void set_ch(int)
+    - ほとんどのメンバ関数は一つのchに対する操作となる
+    - このメソッドでどのchへの操作にするか決める
+- void fit()
+    - 現在選択されているchに対して, fitを行う
+- void save_as(TString)
+    - 現在選択されているchのhistを任意の名前で保存する (png, svg, pdf, rootなど)
