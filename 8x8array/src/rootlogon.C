@@ -15,4 +15,5 @@ void loadMacro(const TString macro_name){
 void rootlogon(){
     loadMacro("fitRange.cc");
     loadMacro("makeHistFit.cc");
+    loadMacro("fitMuonCalibration.cc");
 }
