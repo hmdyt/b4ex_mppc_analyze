@@ -1,5 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import sys
 
 with open("InputDAC_voltage_dependence") as f:
     InputDAC_voltage_dependence = f.read().split('\n')[0:-1]
@@ -35,19 +34,29 @@ def HV_to_DAC(ch, HV):
     return (HV - b2) / a2
 
 
-target_ADC = 1600
+target_ADC = int(sys.argv[1])
 target_HV = [ADC_to_HV(ch, target_ADC) for ch in range(64)]
 statusHV = target_HV[33]
 diff_HV = [target_HV[ch] - statusHV for ch in range(64)]
 diff_HV_DAC = [HV_to_DAC(ch, diff_HV[ch]) for ch in range(64)]
 
+for i in range(64):
+    if diff_HV_DAC[i] < 256:
+        diff_HV_DAC[i] = "256 # {}".format(diff_HV_DAC[i])
+    elif 511 < diff_HV_DAC[i]:
+        diff_HV_DAC[i] = "511 # {}".format(diff_HV_DAC[i])
+    else:
+        diff_HV_DAC[i] = str(int(diff_HV_DAC[i]))
+
+
 with open("InputDAC.yml", 'w') as f:
-    f.write("#statusHV {}\n".format(statusHV))
+    f.write("# targetADC = {}\n".format(target_ADC))
+    f.write("# statusHV {}\n".format(statusHV))
     f.write("EASIROC1:\n")
     f.write("    Input 8-bit DAC:\n")
     for i in range(0, 32):
-        f.write("    - {}\n".format(int(diff_HV_DAC[i])))
+        f.write("    - {}\n".format(diff_HV_DAC[i]))
     f.write("EASIROC2:\n")
     f.write("    Input 8-bit DAC:\n")
     for i in range(32, 64):
-        f.write("    - {}\n".format(int(diff_HV_DAC[i])))
+        f.write("    - {}\n".format(diff_HV_DAC[i]))
