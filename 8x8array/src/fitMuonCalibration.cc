@@ -5,6 +5,7 @@
 #include "TGraph.h"
 #include "TCanvas.h"
 #include <iostream>
+#include <fstream>
 #include <utility>
 #include <vector>
 #include <map>
@@ -164,9 +165,20 @@ void fitMuonCalibration(){
     
     TCanvas *canvas = new TCanvas("canvas", "c", 1920*2, 1080*16);
     canvas->Divide(4, 16);
+    std::ofstream ofs("HV_ADC_pol1_list", std::ios::out);
+    ofs << "#ch a b" << std::endl;
+    TF1* f_pol1s[64];
+    TGraph* graphs[64];
     for (Int_t ch = 0; ch < 64; ch++){
         canvas->cd(ch+1);
-        drawHVvsADC(ch)->Draw("AP");
+        graphs[ch] = drawHVvsADC(ch);
+        f_pol1s[ch] = new TF1(Form("pol1 ch%d", ch), "[0]*x+[1]", 0, 60);
+        graphs[ch]->Fit(f_pol1s[ch], "R");
+        graphs[ch]->Draw("AP");
+        ofs << ch << " ";
+        ofs << f_pol1s[ch]->GetParameter(0) << " ";
+        ofs << f_pol1s[ch]->GetParameter(1) << " ";
+        ofs << std::endl;
     }
     canvas->SaveAs("HV_ADC_plot_muon_calb.png");
     
