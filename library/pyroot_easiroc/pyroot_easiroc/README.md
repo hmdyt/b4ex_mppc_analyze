@@ -2,8 +2,7 @@
 TChainの派生クラス。Easirocで取れた測定データの読み込み, FittingによるThresholdの決定, Effeciencyの見積もりなどをする。
 
 ## class variables
-- channel 対応図
-  ![](/docs/images/channel_image.jpeg)
+- [channel 対応図](/docs/images/channel_image.jpeg)
 - OUTER_CHNNELS: Set\[int]
     - 各ボードについているMPPCの上下4chずつ, 計16chが入っている
 - INNER_CHANNELS: Set\[int]
