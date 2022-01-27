@@ -118,4 +118,5 @@ class TrackSeeker(r.TChain):
                 ch_target,
                 100*self._effeciency[ch_target]
             ))
+            print("used {} events".format(ok+ng))
             
