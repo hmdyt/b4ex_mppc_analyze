@@ -8,7 +8,7 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
 - INNER_CHANNELS: Set\[int]
     - 各ボードについているMPPCの上下4ch以外のch, 計48ch
 - VERTICAL_GROUP_EAST_BOARD: Tuple[Tuple[int]]
-    - 東ボードの鉛直座標が同じMPPCをtupleに詰めている
+    - 東ボードの鉛直方向に垂直な座標が同じMPPCをtupleに詰めている
         ```
         (
             (0, 4, 8, 12, 16, 20, 24, 28),
@@ -18,7 +18,7 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
         )
         ```
 -  VERTICAL_GROUP_WEST_BOARD: Tuple[Tuple[int]]
-    - 西ボードの鉛直座標が同じMPPCをtupleに詰めている
+    - 西ボードの鉛直方向に垂直な座標が同じMPPCをtupleに詰めている
         ```
         (
             (60, 56, 52, 48, 44, 40, 36, 32),
