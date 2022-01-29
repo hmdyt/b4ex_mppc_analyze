@@ -72,7 +72,7 @@ class TrackSeeker(r.TChain):
         tree.Branch("is_hit", is_hit, "is_hit[64]/O")
 
         self._threshold = np.array(self._threshold)
-        for i_event in tqdm(range(self._n_event), desc="making is_hit"):
+        for i_event in tqdm(range(self._n_event), desc="making is_hit", leave=False):
             self.GetEntry(i_event)
             VadcHigh = np.array(self.VadcHigh)
             is_hit = self._threshold < VadcHigh
@@ -100,7 +100,7 @@ class TrackSeeker(r.TChain):
         # calc effeciency
         ok = 0
         ng = 0
-        for i_event in tqdm(range(self._n_event), desc="calc eff ch{}".format(ch_target)):
+        for i_event in tqdm(range(self._n_event), desc="calc eff ch{}".format(ch_target), leave=False):
             if self._is_hit[i_event][ch_up] and self._is_hit[i_event][ch_down]:
                 if self._is_hit[i_event][ch_target]:
                     ok += 1
