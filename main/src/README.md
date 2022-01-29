@@ -1,7 +1,7 @@
 ## compare_effeciency
 - thresholdの値をfitted sigmaを用いて調節, eff-threshold依存性を描く
 
-## compare_effeciency_by_predestal
+## compare_effeciency_by_pedestal
 - ADC value 900 - 1500 を1刻みで動かしながらeffeciencyを計算する
 - effeciencyの計算方法
     - 対象となるchの鉛直方向で7個以上のchで(宇宙線fitの)MPVよりもADCが大きいchを計算の対象とした
