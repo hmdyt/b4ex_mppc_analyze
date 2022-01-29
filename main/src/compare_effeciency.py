@@ -22,13 +22,18 @@ def get_eff(sigma_ratio):
     ts.determine_hit_by_landau_fit()
     for ch in ts.INNER_CHANNELS:
         ts.calc_effeciency(ch)
-    return  ts._effeciency
+    return  ts._effeciency, ts._f_landau
 
 if __name__ == "__main__":
 
     sigma_ratios = [0.5 * i for i in range(7)]
     sigma_ratios = np.linspace(0, 3, 50)
     effs = [get_eff(sigma_ratio) for sigma_ratio in sigma_ratios]
+    effs, f_landaus = [], []
+    for sigma_ratio in sigma_ratios:
+        tmp1, tmp2 = get_eff(sigma_ratio)
+        effs.append(tmp1)
+        f_landaus.append(tmp2)
 
     graphs = [
         r.TGraph()
@@ -41,9 +46,10 @@ if __name__ == "__main__":
         i_point = 0
         for i, sigma_ratio in enumerate(sigma_ratios):
             if effs[i][ch] == None: continue
-            graphs[ch].SetPoint(i_point, sigma_ratio, effs[i][ch])
+            threshold_adc = f_landaus[i][ch].GetParameter(1) - sigma_ratio * f_landaus[i][ch].GetParameter(2)
+            graphs[ch].SetPoint(i_point, threshold_adc, effs[i][ch])
             i_point += 1
         graphs[ch].SetMarkerStyle(8)
-        graphs[ch].SetTitle("ch{};[1/sigma];effeciency".format(ch))
+        graphs[ch].SetTitle("ch{};threshold ADC value ;effeciency".format(ch))
         graphs[ch].Draw("AP")
     canvas.SaveAs("compare_effeciency.png")
