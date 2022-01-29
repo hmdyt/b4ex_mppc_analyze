@@ -1,20 +1,21 @@
-from copy import copy
 import numpy as np
 from tqdm import tqdm
 from pyroot_easiroc.TrackSeeker import TrackSeeker
 import ROOT as r
+import sys
 r.gROOT.SetBatch()
+
 
 class EffeciencyCalc(TrackSeeker):
     def __init__(self, name, filepath):
         super().__init__(name, filepath)
-    
+
     def _prepare_variables(self):
         super()._prepare_variables()
         self._ref_threshold = [0 for _ in range(64)]
         self._ref_is_hit = []
         self._n_event_calc_effeciency = [0 for _ in range(64)]
-    
+
     def set_ref_threshold(self, ch, adc_th):
         self._ref_threshold[ch] = adc_th
 
@@ -22,7 +23,7 @@ class EffeciencyCalc(TrackSeeker):
         super().fit_by_landau(ch)
         for ch in range(64):
             self.set_ref_threshold(ch, self._f_landau[ch].GetParameter(1))
-    
+
     def determine_is_hit(self):
         super().determine_hit_by_landau_fit()
 
@@ -47,9 +48,10 @@ class EffeciencyCalc(TrackSeeker):
         for i_event in tqdm(range(self._n_event), leave=False):
             n_vertical_hitted = 0
             for ch_other in target_vertival_group:
-                if ch_target == ch_other: continue
+                if ch_target == ch_other:
+                    continue
                 n_vertical_hitted += self._ref_is_hit[i_event][ch_other]
-            if n_vertical_hitted > 3:
+            if n_vertical_hitted > 6:
                 if self._is_hit[i_event][ch_target]:
                     ok += 1
                 else:
@@ -61,36 +63,32 @@ class EffeciencyCalc(TrackSeeker):
         else:
             self._effeciency[ch_target] = ok / (ok + ng)
             self._n_event_calc_effeciency[ch_target] = ok+ng
-    
+
     def limit_n_event(self, n_event):
         self._n_event = n_event
 
 
-def get_eff(adc_th):
-    ec = EffeciencyCalc("tree", "run017.root")
-    ec.limit_n_event(10000)
-    for ch in range(64):
-        ec.fit_by_landau(ch)
+def get_eff(ch, adc_th):
+    ec = EffeciencyCalc("tree", "/data/hamada/easiroc_data/run017.root")
+    for _ch in range(64):
+        ec.fit_by_landau(_ch)
     ec.determine_ref_is_hit()
-    for ch in range(64):
-        ec.set_threshold(ch, adc_th)
+    for _ch in range(64):
+        ec.set_threshold(_ch, adc_th)
     ec.determine_is_hit()
-    for ch in range(64):
-        ec.calc_effeciency(ch)
-    return ec._effeciency
+    ec.calc_effeciency(ch)
+    return ec._effeciency[ch]
+
 
 if __name__ == "__main__":
-    graphs = [r.TGraph() for ch in range(64)]
-    for adc in tqdm(range(900, 1500), leave=False, desc="adc arrange"):
-        ret_eff = get_eff(adc)
-        for ch in range(64):
-            graphs[ch].SetPoint(graphs[ch].GetN(), adc, ret_eff[ch])
-
-    canvas = r.TCanvas("c", "c", 1920*2, 1080*16)
-    canvas.Divide(4, 16)
-    for ch in range(64):
-        canvas.cd(ch+1)
-        graphs[ch].SetMarkerStyle(8)
-        graphs[ch].SetTitle("ch{};Threshold ADC value; effeciency".format(ch))
-        graphs[ch].Draw("AP")
-    canvas.SaveAs("compare_effeciency_by_pedestal.png")
+    target_ch = int(sys.argv[1])
+    graph = r.TGraph()
+    graph.SetMarkerStyle(8)
+    graph.SetTitle("ch{};Threshold ADC value; effeciency".format(target_ch))
+    adcs = list(range(900, 1500))
+    for adc in adcs:
+        eff = get_eff(target_ch, adc)
+        graph.SetPoint(graph.GetN(), adc, eff)
+    c = r.TCanvas()
+    graph.Draw("AP")
+    c.SaveAs("adc_eff_ch{}.png".format(target_ch))
