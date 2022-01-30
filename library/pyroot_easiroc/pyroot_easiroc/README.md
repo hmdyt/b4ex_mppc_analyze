@@ -72,6 +72,22 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
 測定ファイル(runxxx.root)からヒット情報を生成するためのクラス。
 チャンネルごとにthreshold(ADC value)を設定し, generate_hit_arrayを実行することでヒット情報が生成される
 
+## usage (example)
+- run017の測定ファイルに対して, ずべてのチャンネルのthresholdをADC1500としてヒット情報を生成するなら以下のように書く
+    ```python
+    from pyroot_easiroc.HitArrayGen import HitArrayGen
+
+    hit_array_gen = HitArrayGen("run017.root")
+    for ch in range(64):
+        hit_array_gen.set_threshold(ch, 1500)
+    hit_array_gen.generate_hit_array()
+    hit_array = hit_array_gen.get_hit_array()
+
+    print(hit_array.shape)
+    print(hit_array[0])# showing 0th event
+
+    ```
+
 ## Class Variables
 ### CHANNELS_UPSIDE: np.array(List[List[int]])
 - 井形に組んでいる上側シンチレータのchを格納している
@@ -104,6 +120,11 @@ array([
 ```
 
 ## Member functions
+### constructor(rootfile_path)
+- コンストラクタで対象とするrootfileのパスを設定する
+- 正規表現は使えない
+- .rootで終わらないと怒られる
+  
 ### set_threshold(ch: int, adc_th: int) -> void
 - chごとのthreshold(ADC_value)を設定する
 - 何も設定しないと, 全てのchでADC_value 1200になっている
