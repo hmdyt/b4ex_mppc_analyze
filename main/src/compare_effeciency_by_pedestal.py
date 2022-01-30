@@ -1,4 +1,3 @@
-from copy import deepcopy
 import numpy as np
 from tqdm import tqdm
 from pyroot_easiroc.TrackSeeker import TrackSeeker
@@ -98,8 +97,22 @@ def get_eff(adc, n_hit):
 if __name__ == "__main__":
     n_hit = int(sys.argv[1])
     fout = open("compare_eff_ped_{}hit.txt".format(n_hit), 'w')
+    g = [r.TGraph() for _ in range(64)]
+
+    for ch in range(64):
+        g[ch].SetMarkerStyle(8)
+        g[ch].SetTitle("ch{} n={};Threshold ADC Value;Effeciency".format(ch, n_hit))
     for adc in tqdm(range(900, 1500, 2), desc="ADC"):
         res = get_eff(adc, n_hit)
+        for ch in range(64):
+            if res[ch] == None: continue
+            g[ch].SetPoint(g[ch].GetN(), adc, res[ch])
         fout.write("{} ".format(adc))
         fout.write(" ".join(map(str, res)) + "\n")
-
+    
+    canvas = r.TCanvas("c", "c", 1920*2, 1080*16)
+    canvas.Divide(4, 16)
+    for ch in range(64):
+        canvas.cd(ch+1)
+        g[ch].Draw("AP")
+    canvas.SaveAs("compare_effeciency_by_pedestal.png")
