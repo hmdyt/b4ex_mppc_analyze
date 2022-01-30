@@ -125,5 +125,6 @@ array([
     ```
         _hit_array[i_event][k][i][j]
     ```
-    ![xy](/docs/images/detector_index_xy.jpeg)
-    ![zx](/docs/images/detector_index_zx.jpeg)
+    |i,j|k|
+    |---|---|
+    |![xy](/docs/images/detector_index_xy.jpeg)|![zx](/docs/images/detector_index_zx.jpeg)|
