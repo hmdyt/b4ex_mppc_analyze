@@ -30,7 +30,7 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
 - VERTICAL_GROUP: Tuple[Tuple[int]]
     - VERTICAL_GROUP_EAST_BOARD + VERTICAL_GROUP_WEST_BOARD
 
-## Menber variables
+## Member variables
 - \_n_event: int
     - 読み込んだrootfileの中の総エントリー数
 - \_hist: List[TH1D]\(64)
@@ -45,7 +45,7 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
     - 計算されたeffeciencyが格納される
     - 計算前はNoneが詰まっている
 
-## Menber functions
+## Member functions
 ### constructor(name, filepath)
 - arg
     - name: treeの名前
@@ -67,3 +67,63 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
     (検出効率) = (ターゲットchと上下のchが鳴ったイベント数) / (上下のchが鳴ったイベント数)
     ```
 - 上下16ch以外のchに対応している
+
+# HitArrayGen
+測定ファイル(runxxx.root)からヒット情報を生成するためのクラス。
+チャンネルごとにthreshold(ADC value)を設定し, generate_hit_arrayを実行することでヒット情報が生成される
+
+## Class Variables
+### CHANNELS_UPSIDE: np.array(List[List[int]])
+- 井形に組んでいる上側シンチレータのchを格納している
+``` 
+array([
+    [ 0,  1,  2,  3],
+    [ 4,  5,  6,  7],
+    [ 8,  9, 10, 11],
+    [12, 13, 14, 15],
+    [16, 17, 18, 19],
+    [20, 21, 22, 23],
+    [24, 25, 26, 27],
+    [28, 29, 30, 31]
+    ])
+```
+
+### CHANNELS_DOWNSIDE: np.array(List[List[int]])
+- 井形に組んでいる下側シンチレータのchを格納している
+```
+array([
+    [63, 62, 61, 60],
+    [59, 58, 57, 56],
+    [55, 54, 53, 52],
+    [51, 50, 49, 48],
+    [47, 46, 45, 44],
+    [43, 42, 41, 40],
+    [39, 38, 37, 36],
+    [35, 34, 33, 32]
+    ])
+```
+
+## Member functions
+### set_threshold(ch: int, adc_th: int) -> void
+- chごとのthreshold(ADC_value)を設定する
+- 何も設定しないと, 全てのchでADC_value 1200になっている
+
+### generate_hit_array() -> void
+- 測定ファイルと設定されたthresholdの情報からヒット情報を計算する
+- 計算結果であるヒット情報はメンバ変数_hit_arrayに格納されている
+
+### get_hit_array() -> np.array(dtype=np.bool)
+- ヒット情報 (_hit_array) を返す関数　ゲッタ
+
+## _hit_arrayについて
+- イベント数の長さだけ3次元arrayが格納されている
+    - _hit_array.shape = (n_event, 8, 4, 4)
+- 各インデックスの意味
+    - i_event: 何番目のイベントか
+    - k: 検出器のz軸方向
+    - i,j: xy平面で検出器のどこにあるか
+    ```
+        _hit_array[i_event][k][i][j]
+    ```
+    ![xy](/docs/images/detector_index_xy.jpeg)
+    ![zx](/docs/images/detector_index_zx.jpeg)
