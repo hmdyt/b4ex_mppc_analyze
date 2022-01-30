@@ -72,6 +72,9 @@ TChainの派生クラス。Easirocで取れた測定データの読み込み, Fi
 測定ファイル(runxxx.root)からヒット情報を生成するためのクラス。
 チャンネルごとにthreshold(ADC value)を設定し, generate_hit_arrayを実行することでヒット情報が生成される
 
+## TODO
+- \_hit_arrayをrootfileとして書き出せるようにする
+
 ## usage (example)
 - run017の測定ファイルに対して, ずべてのチャンネルのthresholdをADC1500としてヒット情報を生成するなら以下のように書く
     ```python
