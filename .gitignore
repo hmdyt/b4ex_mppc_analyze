@@ -205,3 +205,4 @@ calibration*
 make_scinti_*
 test.py
 calibrationUtils*
+*.root
