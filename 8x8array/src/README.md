@@ -29,3 +29,10 @@
     - 現在選択されているchに対して, fitを行う
 - void save_as(TString)
     - 現在選択されているchのhistを任意の名前で保存する (png, svg, pdf, rootなど)
+
+## make_hitmap_3D.py
+- イベントディスプレイをpng, htmlで出力する
+- 例えば, ADV_threshold = 1200, run999.rootの100event目をターゲットとするなら以下のように使う
+```bash
+python3 make_hitmap_3D.py 1200 100 "run999.root"
+```
