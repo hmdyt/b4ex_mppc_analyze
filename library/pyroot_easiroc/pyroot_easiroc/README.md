@@ -168,3 +168,25 @@ array([
 ## get_64ch_effeciency() -> List[int]
 - 現在の設定で検出効率を計算する
 - chごとに計算された検出効率がreturnされる
+
+## TrackReconstructorBase
+### __init__(rootfile_path)
+- 引数となるrootfile_pathから上記のhit_array_genで作られたhit情報を読み込む
+
+- SHOWING_RANGE
+    - hit情報をplotした絵の表示のparameter
+- X_LEN, Y_LEN  
+    - ともに原点となる菱形の情報
+ 
+### fit_track(i_event)
+- i_event目のイベントに関してtrackを書く  
+- forループでhit情報からピクセルとなる菱形の座標を指定する。hitしていたら'red',hitしていたら'cyan'に色分けする
+
+### show(i_event)
+- forループでfit_trackで指定した座標をplotする
+- それ以降はplotをxyzそれぞれの方向から見たものを表示させるためのもの
+- png,htmlで保存する
+
+
+
+
