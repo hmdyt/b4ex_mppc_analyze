@@ -8,9 +8,12 @@ from .HitArrayGen import HitArrayGen
 r.gROOT.SetBatch()
 
 
-class TrackReconstructorBase:
-    # ヒット情報が入ったrootfileのパス
-    def __init__(self, rootfile_path: str) -> None:
+class TrackReconstuctorBase:
+    SHOWING_RANGE = (-100, 100)
+    X_LEN = Rhombus(0, [0, 0, 0]).x_len
+    Y_LEN = Rhombus(0, [0, 0, 0]).y_len
+ 
+    def __init__(self, rootfile_path : str) -> None:
         self._rootfile_path = rootfile_path
         self._hit_array_gen = HitArrayGen(self._rootfile_path)
         for ch in range(64):
@@ -18,15 +21,11 @@ class TrackReconstructorBase:
         self._hit_array_gen.generate_hit_array()
         self._hit_array = self._hit_array_gen.get_hit_array()
 
-    SHOWING_RANGE = (-100, 100)
-    X_LEN = Rhombus(0, [0, 0, 0]).x_len
-    Y_LEN = Rhombus(0, [0, 0, 0]).y_len
-
-    pixels = []
-    pix_color = []
-    pix_index = 0
-
     def fit_track(self, i_event):
+        self._i_event = i_event
+        self.pixels = []
+        self.pix_color = []
+        self.pix_index = 0
         for i_layer in range(-4, 4):
             for i in range(-2, 2):
                 for j in range(-2, 2):
@@ -41,11 +40,10 @@ class TrackReconstructorBase:
                     self.pixels.append(pix)
                     self.pix_index += 1
 
-    data_scinti_mesh = []
-    index = 0
-
     def show(self, i_event):
         self._i_event = i_event
+        self.data_scinti_mesh = []
+        self.index = 0
         for pix in self.pixels:
             x, y, z = pix.get_vertices().T
             i, j, k = pix.get_faces().T
