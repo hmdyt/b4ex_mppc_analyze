@@ -193,6 +193,7 @@ cython_debug/
 8x2array/img/
 main/img
 **/img_*
+**/out/*
 
 #ignore cal_*
 cal_*
