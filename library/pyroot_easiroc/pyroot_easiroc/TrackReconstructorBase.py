@@ -8,7 +8,7 @@ from .HitArrayGen import HitArrayGen
 r.gROOT.SetBatch()
 
 
-class TrackReconstuctorBase:
+class TrackReconstructorBase:
     SHOWING_RANGE = (-100, 100)
     X_LEN = Rhombus(0, [0, 0, 0]).x_len
     Y_LEN = Rhombus(0, [0, 0, 0]).y_len
