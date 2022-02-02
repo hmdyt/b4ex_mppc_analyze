@@ -152,3 +152,21 @@ array([
     |i,j|k|
     |---|---|
     |![xy](/docs/images/detector_index_xy.jpeg)|![zx](/docs/images/detector_index_zx.jpeg)|
+
+### get_hit_array() -> np.array(dtype=np.bool)
+### get_hit_array() -> np.array(dtype=np.bool)
+
+## TrackReconstructorBase
+- ###__init__(rootfile_path)
+    - 引数となるrootfile_pathから上記のhit_array_genで作られたhit情報を読み込む
+- SHOWING_RANGE
+    - hit情報をplotした絵の表示のparameter
+- X_LEN, Y_LEN  
+    - ともに原点となる菱形の情報
+- ###fit_track(i_event)
+    - i_event目のイベントに関してtrackを書く  
+    - forループでhit情報からピクセルとなる菱形の座標を指定する。hitしていたら'red',hitしていたら'cyan'に色分けする
+- ###show(i_event)
+    - forループでfit_trackで指定した座標をplotする
+    - それ以降はplotをxyzそれぞれの方向から見たものを表示させるためのもの
+    - png,htmlで保存する
