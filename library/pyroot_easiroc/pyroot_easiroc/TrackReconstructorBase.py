@@ -8,7 +8,10 @@ from .Rhombus import Rhombus
 from .HitArrayGen import HitArrayGen 
 
 class TrackReconstuctorBase:
-    #ヒット情報が入ったrootfileのパス
+    SHOWING_RANGE = (-100, 100)
+    X_LEN = Rhombus(0, [0, 0, 0]).x_len
+    Y_LEN = Rhombus(0, [0, 0, 0]).y_len
+ 
     def __init__(self, rootfile_path : str) -> None:
         self._rootfile_path = rootfile_path
         self._hit_array_gen = HitArrayGen(self._rootfile_path)
@@ -17,15 +20,11 @@ class TrackReconstuctorBase:
         self._hit_array_gen.generate_hit_array()
         self._hit_array = self._hit_array_gen.get_hit_array()
 
-    SHOWING_RANGE = (-100, 100)
-    X_LEN = Rhombus(0, [0, 0, 0]).x_len
-    Y_LEN = Rhombus(0, [0, 0, 0]).y_len
-
-    pixels = []
-    pix_color = []
-    pix_index = 0
-
     def fit_track(self, i_event):
+        self._i_event = i_event
+        self.pixels = []
+        self.pix_color = []
+        self.pix_index = 0
         for i_layer in range(-4, 4):
             for i in range(-2, 2):
                 for j in range(-2, 2):
@@ -40,12 +39,9 @@ class TrackReconstuctorBase:
                     self.pixels.append(pix)
                     self.pix_index += 1
 
-    
-    data_scinti_mesh = []
-    index = 0
-
     def show(self, i_event):
-        self._i_event = i_event
+        self.data_scinti_mesh = []
+        self.index = 0
         for pix in self.pixels:
             x, y, z = pix.get_vertices().T
             i, j, k = pix.get_faces().T
@@ -69,8 +65,8 @@ class TrackReconstuctorBase:
         fig = make_subplots(rows=2, cols=2, specs=[[{'type': 'mesh3d'},{'type': 'mesh3d'}],[{'type': 'mesh3d'},{}]])
         for i in range(len(self.data_scinti_mesh)):
             fig.add_trace(self.data_scinti_mesh[i], row = 1, col = 1)
-            fig.add_trace(self.data_scinti_mesh[i], row = 1,col=2)
-            fig.add_trace(self.data_scinti_mesh[i], row=2, col=1)
+            fig.add_trace(self.data_scinti_mesh[i], row = 1, col = 2)
+            fig.add_trace(self.data_scinti_mesh[i], row = 2, col = 1)
 
         fig.update_layout(layout)
         fig.update_layout(height=900, width=1500)
