@@ -153,8 +153,21 @@ array([
     |---|---|
     |![xy](/docs/images/detector_index_xy.jpeg)|![zx](/docs/images/detector_index_zx.jpeg)|
 
-### get_hit_array() -> np.array(dtype=np.bool)
-### get_hit_array() -> np.array(dtype=np.bool)
+# EffCalculator
+検出効率を調べるためのクラス。
+
+## constructor(n_hit, tree_name, filepath) -> None
+- n_hit: 検出効率を調べるためのイベントの選定基準, 縦方向にn_hitよりも多くヒットしていれば検出効率の計算に使うイベントとする
+- tree_name: 対象とするTTreeの名前
+- filepath: 対象とするTTreeの入ったrootfileのパス
+
+## determine_hits(adc_threshold_s: List[int]) -> None
+- chごとのthreshold ADC valueをlistにして渡す
+- thresholdを超えたか超えてないかを全ch, eventで決める
+
+## get_64ch_effeciency() -> List[int]
+- 現在の設定で検出効率を計算する
+- chごとに計算された検出効率がreturnされる
 
 ## TrackReconstructorBase
 ### __init__(rootfile_path)
@@ -173,3 +186,7 @@ array([
 - forループでfit_trackで指定した座標をplotする
 - それ以降はplotをxyzそれぞれの方向から見たものを表示させるためのもの
 - png,htmlで保存する
+
+
+
+
