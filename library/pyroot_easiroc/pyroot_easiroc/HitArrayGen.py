@@ -16,7 +16,7 @@ class HitArrayGen:
         self._check_uproot_version()
         self._check_rootfile_extension(rootfile_path)
         self._load_rootfile(rootfile_path)
-        print("{}\n {} event laoded.".format(self._rootfile_path, self._n_event))
+        print("{}\n {} event loaded.".format(self._rootfile_path, self._n_event))
         self._prepare_variables()
 
     def _check_uproot_version(self):

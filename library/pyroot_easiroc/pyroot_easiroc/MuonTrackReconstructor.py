@@ -3,9 +3,10 @@ from .TrackReconstructorBase import TrackReconstructorBase
 import numpy as np
 from tqdm import tqdm
 
+
 class MuonTrackReconstructor(TrackReconstructorBase):
-    def __init__(self,rootfile_path) -> None:
-        super().__init__(rootfile_path)
+    def __init__(self, rootfile_path, threshold_s) -> None:
+        super().__init__(rootfile_path, threshold_s)
         self._hit_array = self._hit_array_gen.get_hit_array()
         print(self._hit_array.shape[0])
     
