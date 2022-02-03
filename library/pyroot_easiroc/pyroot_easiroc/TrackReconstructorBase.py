@@ -37,8 +37,8 @@ class TrackReconstructorBase:
                         self.pix_index,
                         [self.X_LEN * (i - j), self.Y_LEN * (i + j), 8 * i_layer]
                     )
-                    if self._hit_array[i_event][i_layer][i + 2, j + 2] == 1.0:
-                        self.pix_color.append("red")
+                    if self._hit_array[i_event][i_layer + 4][i + 2, j + 2] == 1.0:
+                        self.pix_color.append("black")
                     else:
                         self.pix_color.append("cyan")
                     self.pixels.append(pix)
@@ -48,6 +48,7 @@ class TrackReconstructorBase:
         self._i_event = i_event
         self.data_scinti_mesh = []
         self.index = 0
+        self.fit_track(i_event)
         for pix in self.pixels:
             x, y, z = pix.get_vertices().T
             i, j, k = pix.get_faces().T
@@ -56,7 +57,7 @@ class TrackReconstructorBase:
                 go.Mesh3d(
                     x=x, y=y, z=z, i=i, j=j, k=k,
                     color=self.pix_color[self.index],
-                    opacity=0.05
+                    opacity=0.05 if self.pix_color[self.index] == "cyan" else 1
                 )
             )
             self.index += 1
