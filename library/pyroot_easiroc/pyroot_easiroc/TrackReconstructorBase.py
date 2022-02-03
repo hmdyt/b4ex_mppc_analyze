@@ -1,3 +1,4 @@
+from typing import List
 import numpy as np
 import ROOT as r
 import os
@@ -12,12 +13,15 @@ class TrackReconstructorBase:
     SHOWING_RANGE = (-100, 100)
     X_LEN = Rhombus(0, [0, 0, 0]).x_len
     Y_LEN = Rhombus(0, [0, 0, 0]).y_len
- 
-    def __init__(self, rootfile_path : str) -> None:
+
+    def __init__(self, rootfile_path: str, threshold_s: List[int]) -> None:
+        if len(threshold_s) != 64:
+            print("invalid threshold list length")
+            exit()
         self._rootfile_path = rootfile_path
         self._hit_array_gen = HitArrayGen(self._rootfile_path)
         for ch in range(64):
-            self._hit_array_gen.set_threshold(ch, 830)
+            self._hit_array_gen.set_threshold(ch, threshold_s[ch])
         self._hit_array_gen.generate_hit_array()
         self._hit_array = self._hit_array_gen.get_hit_array()
 
