@@ -189,6 +189,7 @@ array([
 
 
 ## MuonTrackReconstructor
+直線で通ったであろうイベントを見つける。そのイベントに条件をつけてみたいイベントを絞る
 ### __init__(rootfile_path, threshold_s)
 - threshold_s
     -各ch毎のthreshold
