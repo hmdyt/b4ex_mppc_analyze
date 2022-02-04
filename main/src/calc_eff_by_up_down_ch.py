@@ -6,14 +6,14 @@ r.gROOT.SetBatch()
 
 
 def calc_eff(adc):
-    ec = EffCalculatorUpDown("tree", "/data/hamada/easiroc_data/run017.root")
+    ec = EffCalculatorUpDown("tree", "/data/hamada/easiroc_data/run017_023.root")
     ec.set_ref_threshold_s([1100 for _ in range(64)])
     ec.set_threshold_s([adc for _ in range(64)])
     effs = ec.calc_all_ch_effeciency()
     return adc, effs
 
 
-pool = multiprocessing.Pool(8)
+pool = multiprocessing.Pool(2)
 adcs = list(range(800, 1500))
 effeciency = []
 with tqdm(total=len(adcs)) as t:
