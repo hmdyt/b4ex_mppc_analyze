@@ -188,5 +188,14 @@ array([
 - png,htmlで保存する
 
 
+## MuonTrackReconstructor
+### __init__(rootfile_path, threshold_s)
+- threshold_s
+    -各ch毎のthreshold
+- hit_array
+    -　super()からもらう
+### _pre_cut_threshold_layer
 
-
+####
+####
+###
