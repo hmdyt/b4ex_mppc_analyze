@@ -22,10 +22,39 @@ class MuonTrackReconstructor(TrackReconstructorBase):
             100 * self._pre_cut_array.shape[0] / self._hit_array.shape[0]
         ))
 
+    # 全ての層を見て、1つの層以上で決めたヒット数よりも多いものを選び出す
+    def _multi_hit(self):
+        self._multi_hit_event_index = []
+        self._threshold_hit = 4
+        for i_event in tqdm(self._pre_cut_index):
+            if (np.any(self._layer_n_hit[i_event] >= self._threshold_hit)):
+                self._multi_hit_event_index.append(i_event)
+
+        print("multi_hit event is ",len(self._multi_hit_event_index))
+        print("selected multi_hit event, {:.2f}% remain".format(
+            100 * len(self._multi_hit_event_index) / self._hit_array.shape[0]
+        )) 
+
+    # 決めた層よりも下の層でいくつ鳴ったかでふるいに掛ける
+    def _under_layer_limit(self):
+        self._under_layer_limit_index = []
+        self._origin_layar = 6
+        # hit_arrayは上から下層の情報なので8 - origin_layer
+        self._orogin_layer_under = 8 - self._origin_layar
+        for i_event in tqdm(self._multi_hit_event_index):
+            if (np.any(self._layer_n_hit[i_event][0: self._orogin_layer_under] >= self._threshold_hit)):
+                self._under_layer_limit_index.append(i_event)
+
+        print("multi_hit event & under layer cut is ",len(self._under_layer_limit_index))
+        print("selected multi_hit & under layer cut event, {:.2f}% remain".format(
+            100 * len(self._under_layer_limit_index) / self._hit_array.shape[0]
+        )) 
+
+
     def hit_muon_straight(self):
         self._hit_muon_index = []
         
-        for i_event in tqdm(self._pre_cut_index):
+        for i_event in tqdm(self._under_layer_limit_index):
             for i_layer, i,j in itertools.product(range(8), range(4), range(4)):
                 if(i_layer == 7): 
                     self._hit_muon_index.append(i_event)
@@ -50,40 +79,10 @@ class MuonTrackReconstructor(TrackReconstructorBase):
                             break
                         continue
 
-        print("straight event is ",len(self._hit_muon_index))
-        print("selected straight event, {:.2f}% remain".format(
+        print("straight event & multi_hit event & under layer cut is ",len(self._hit_muon_index))
+        print("selected straight event & multi_hit event & under layer cut, {:.2f}% remain".format(
             100 * len(self._hit_muon_index) / self._hit_array.shape[0]
         ))   
-
-    # 全ての層を見て、1つの層以上で決めたヒット数よりも多いものを選び出す
-    def _multi_hit(self):
-        self._multi_hit_event_index = []
-        self._threshold_hit = 4
-        self._multi_hit_event_array = self._hit_array[self._hit_muon_index]
-        for i_event in tqdm(self._hit_muon_index):
-            if (np.any(self._layer_n_hit[i_event] >= self._threshold_hit)):
-                self._multi_hit_event_index.append(i_event)
-
-        print("straight & multi_hit event is ",len(self._multi_hit_event_index))
-        print("selected straight & multi_hit event, {:.2f}% remain".format(
-            100 * len(self._multi_hit_event_index) / self._hit_array.shape[0]
-        )) 
-
-    # 決めた層よりも下の層でいくつ鳴ったかでふるいに掛ける
-    def _under_layer_limit(self):
-        self._under_layer_limit_index = []
-        self._origin_layar = 6
-        # hit_arrayは上から下層の情報なので8 - origin_layer
-        self._orogin_layer_under = 8 - self._origin_layar
-        self._under_layer_limit_array = self._hit_array[self._multi_hit_event_index]
-        for i_event in tqdm(self._multi_hit_event_index):
-            if (np.any(self._layer_n_hit[i_event][0: self._orogin_layer_under] >= self._threshold_hit)):
-                self._under_layer_limit_index.append(i_event)
-
-        print("straight & multi_hit event & under layer cut is ",len(self._under_layer_limit_index))
-        print("selected straight & multi_hit & under layer cut event, {:.2f}% remain".format(
-            100 * len(self._under_layer_limit_index) / self._hit_array.shape[0]
-        )) 
 
     def write_fig(self, i_event):
         filename_short = self._rootfile_path.split('/')[-1]
