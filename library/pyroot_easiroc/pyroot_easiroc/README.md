@@ -194,8 +194,46 @@ array([
     -各ch毎のthreshold
 - hit_array
     -　super()からもらう
+    -　
 ### _pre_cut_threshold_layer
+._theresholdで決めた数の層がなっていれば保存
+- _layar_n_hit
+    - 各層でなった数を教えてくれる
+- _hit_layer_number
+    - なった層があるかないかのtrue,false
+- _thershold_layar_number
+    - いずれかの層で何回以上なってほしいかの値
+- _pre_cut_index
+    - _thershold_layar_numberを超えたイベントのindex
+- _pre_cut_array
+    - 保存された配列。（もしかするといらない？考える）
 
-####
-####
-###
+### hit_muon_straight
+hitしたピクセルの下の層とその次の層で、そのピクセルの八方（k層(i,j)座標にhitがあれば、k+1層([i-1,i+1],[j-1,j+1]座標とk+2層([i-1,i+1],[j-1,j+1]座標）にhitがあるイベントを保存する
+- hit_muon_index
+    - 条件を満たしたindexが入る
+- for文でこの関数でしたいことをして条件を満たしたindexを保存
+
+### multi_hit
+いずれかの層で_thershold_layar_numberで決めた値を超えたhitがあればeventを保存する
+- multi_hit_index
+    - 条件を満たしたindexが入る
+- threshold_hit
+    - いずれかの層でいくつhitが欲しいか
+- multi_hit_array
+    - これいらんくね。修正入れるときに直す
+- for文でこの関数でしたいことをして条件を満たしたindexを保存
+
+### under_layer_limit
+origin_layarよりも下で、上記で決めたthershold_layar_numberを超えたhit数があったものを保存
+- under_layer_limit_index
+    - 条件を満たしたindexが入る
+- origin_layar
+    - 絵で見たときのlayerの数。上から0,1,2で数える
+- origin_layer_under
+    - 配列は上の層から絵を描いていくため、逆順になる
+- for文でこの関数でしたいことをして条件を満たしたindexを保存
+
+### write_fig
+img_（ファイル名）_（何層以上なったか）＿layer_hits_(何個以上なったか)_hits_under_（何個以上が何層目より下か）_layerというディレクトリ名を作り、
+event(イベント番号).で.pngと.htmlで保存
