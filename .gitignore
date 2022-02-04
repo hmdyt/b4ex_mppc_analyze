@@ -205,6 +205,7 @@ cal_*
 
 calibration*
 make_scinti_*
-test.py
+test*
 calibrationUtils*
 *.root
+make_hitmap*
