@@ -6,10 +6,10 @@ threshold_s = [1200] * 64
 
 mtr = MuonTrackReconstructor(rootfile_path, threshold_s)
 mtr._pre_cut_threshold_layer()
-mtr.hit_muon_straight()
 mtr._multi_hit()
 mtr._under_layer_limit()
+mtr.hit_muon_straight()
 
 i_event = 0
 
-mtr.show(mtr._under_layer_limit_index[i_event])
+mtr.show(mtr._hit_muon_index[i_event])
