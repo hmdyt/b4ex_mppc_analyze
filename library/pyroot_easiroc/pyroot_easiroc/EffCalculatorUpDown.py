@@ -71,10 +71,21 @@ class EffCalculatorUpDown:
                 ch_and == 1
             )[0]
             self._use_index_s[ch] = use_index
+        # down side channels
+        for ch in self.OUTER_DOWN_CHNNELS:
+            ch_up = [None for _ in range(7)]
+            ch_up[0] = self._get_upside_channel(ch)
+            for i in range(1, 7):
+                ch_up[i] = self._get_upside_channel(ch_up[i-1])
+            ch_and = np.ones(shape=(len(self._VadcHigh)), dtype=np.bool)
+            for i in range(7):
+                ch_and = ch_and * self._ref_hit.T[ch_up[i]]
+            use_index = np.where(
+                ch_and == 1
+            )[0]
+            self._use_index_s[ch] = use_index
 
     def _calc_effeciency(self, ch) -> float:
-        if ch in self.OUTER_DOWN_CHNNELS:
-            return 0
         use_index = self._use_index_s[ch]
         ok_index = np.where(
             self._is_hit[use_index].T[ch] == 1
