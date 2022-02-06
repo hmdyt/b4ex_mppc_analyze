@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Tuple
+import itertools
 import numpy as np
 import ROOT as r
 import os
@@ -129,6 +130,30 @@ class TrackReconstructorBase:
                         self.pix_color.append("cyan")
                     self.pixels.append(pix)
                     self.pix_index += 1
+
+    def draw_line(self, point_1: Tuple[float], point_2: Tuple[float], line_width=0.7):
+        points = [point_1, point_2]
+        edges = []
+        for point in points:
+            for dx in [line_width, -line_width]:
+                for dy in [line_width, -line_width]:
+                    edges.append([
+                        point[0] + dx,
+                        point[1] + dy,
+                        point[2]
+                    ])
+        edges = np.array(edges)
+        faces = np.array(tuple(itertools.combinations(range(len(edges)), 3)))
+        edge_x, edge_y, edge_z = edges.T
+        face_i, face_j, face_k = faces.T
+        line_mesh_data = go.Mesh3d(
+            x=edge_x, y=edge_y, z=edge_z,
+            i=face_i, j=face_j, k=face_k,
+            color="red"
+        )
+        self._fig.add_trace(line_mesh_data, row=1, col=1)
+        self._fig.add_trace(line_mesh_data, row=1, col=2)
+        self._fig.add_trace(line_mesh_data, row=2, col=1)
 
     def show(self, i_event):
         self._init_fig()
