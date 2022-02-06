@@ -132,6 +132,9 @@ class TrackReconstructorBase:
                     self.pix_index += 1
 
     def draw_line(self, point_1: Tuple[float], point_2: Tuple[float], line_width=0.7):
+        """
+        USE AFTER _init_fig()
+        """
         points = [point_1, point_2]
         edges = []
         for point in points:
