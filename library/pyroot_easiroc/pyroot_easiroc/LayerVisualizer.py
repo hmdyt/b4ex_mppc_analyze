@@ -60,8 +60,16 @@ class LayerVisualizer:
         self._draw_a_layer(0, 8, 1)
 
     def _draw_a_layer(self, i_layer, row, col):
-        for i in range(i_layer*16, i_layer*16 + 16):
-            self._fig.add_trace(self._tr.data_scinti_mesh[i], row=row, col=col)
+        for i_pix in range(i_layer*16, i_layer*16 + 16):
+            x, y, z = self._tr.pixels[i_pix].get_vertices().T
+            i, j, k = self._tr.pixels[i_pix].get_faces().T
+            self._fig.add_trace(
+                go.Mesh3d(
+                    x=x, y=y, z=z, i=i, j=j, k=k,
+                    color=self._tr.pix_color[i_pix],
+                ),
+                row=row, col=col
+            )
 
     def write_fig(self):
         os.makedirs("img_{}".format(self._tr._filename_short), exist_ok=True)
