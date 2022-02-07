@@ -48,11 +48,25 @@ class FitPointMuonTrackReconstructor(TrackReconstructorBase):
             100 * len(self._select_bottom_layer_hit_event_index) / self._hit_array.shape[0]
         )) 
 
+    # 2層連続でなっていないイベントを排除
+    def _cut_non_2_layer_continue_event(self):
+        self._cut_non_2_layer_continue_event_index = []
+        for i_event in tqdm(self._select_bottom_layer_hit_event_index):
+            for i_layer in range(8):
+                if (i_layer == 7):
+                    self._cut_non_2_layer_continue_event_index.append(i_event)
+                if (np.all(self._layer_n_hit[i_event][i_layer:i_layer+1] == 0)):
+                    break
+
+        print("cut non 2 layer continue event is ",len(self._cut_non_2_layer_continue_event_index))
+        print("selected select top & bottom layer_hit_event, {:.2f}% remain".format(
+            100 * len(self._cut_non_2_layer_continue_event_index) / self._hit_array.shape[0]
+        )) 
 
     # 3-7層で2hitあるイベントを保存
     def _select_2hits(self):
         self._select_2hits_index = [] 
-        for i_event in tqdm(self._select_bottom_layer_hit_event_index):
+        for i_event in tqdm(self._cut_non_2_layer_continue_event_index):
             if(np.any(self._layer_n_hit[i_event][1:6] >= 2)):
                 self._select_2hits_index.append(i_event)
         print("select 2 hits event is ",len(self._select_2hits_index))
