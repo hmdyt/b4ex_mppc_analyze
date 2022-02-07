@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Tuple
+import itertools
 import numpy as np
 import ROOT as r
 import os
@@ -19,6 +20,7 @@ class TrackReconstructorBase:
             print("invalid threshold list length")
             exit()
         self._rootfile_path = rootfile_path
+        self._filename_short = self._rootfile_path.split('/')[-1]
         self._hit_array_gen = HitArrayGen(self._rootfile_path)
         for ch in range(64):
             self._hit_array_gen.set_threshold(ch, threshold_s[ch])
@@ -57,21 +59,25 @@ class TrackReconstructorBase:
         self._fig.update_layout(height=900, width=1500)
         self._fig.update_layout(scene2_aspectmode='data')
         self._fig.update_layout(scene3_aspectmode='data')
-        self._fig.update_scenes(camera=dict(
-            eye=dict(x=0.7, y=0, z=0)
-        ),
+        self._fig.update_scenes(
+            camera=dict(
+                eye=dict(x=0.7, y=0, z=0)
+            ),
             xaxis_showticklabels=False,
             yaxis_showticklabels=False,
             zaxis_showticklabels=False,
-            row=1, col=1)
-        self._fig.update_scenes(camera=dict(
-            eye=dict(x=0, y=3.0, z=0)
-        ),
+            row=1, col=1
+        )
+        self._fig.update_scenes(
+            camera=dict(
+                eye=dict(x=0, y=3.0, z=0)
+            ),
             camera_projection_type="orthographic",
             xaxis_showticklabels=False,
             yaxis_showticklabels=False,
             zaxis_showticklabels=False,
-            row=2, col=1)
+            row=2, col=1
+        )
         self._fig.update_scenes(
             camera=dict(
                 eye=dict(x=0, y=0, z=2.7)
@@ -104,7 +110,7 @@ class TrackReconstructorBase:
         self._fig.update_layout(title_text="{} event {}".format(self._rootfile_path, i_event))
 
     def write_fig(self, i_event):
-        filename_short = self._rootfile_path.split('/')[-1]
+        filename_short = self._filename_short
         os.makedirs("img_{}".format(filename_short), exist_ok=True)
         self._fig.write_image("img_{}/event{}.png".format(filename_short, i_event), scale=10)
         print("img_{}/event{}.png".format(filename_short, i_event))
@@ -129,6 +135,33 @@ class TrackReconstructorBase:
                         self.pix_color.append("cyan")
                     self.pixels.append(pix)
                     self.pix_index += 1
+
+    def draw_line(self, point_1: Tuple[float], point_2: Tuple[float], line_width=0.7):
+        """
+        USE AFTER _init_fig()
+        """
+        self._points = [point_1, point_2]
+        edges = []
+        for point in self._points:
+            for dx in [line_width, -line_width]:
+                for dy in [line_width, -line_width]:
+                    edges.append([
+                        point[0] + dx,
+                        point[1] + dy,
+                        point[2]
+                    ])
+        edges = np.array(edges)
+        faces = np.array(tuple(itertools.combinations(range(len(edges)), 3)))
+        edge_x, edge_y, edge_z = edges.T
+        face_i, face_j, face_k = faces.T
+        line_mesh_data = go.Mesh3d(
+            x=edge_x, y=edge_y, z=edge_z,
+            i=face_i, j=face_j, k=face_k,
+            color="red"
+        )
+        self._fig.add_trace(line_mesh_data, row=1, col=1)
+        self._fig.add_trace(line_mesh_data, row=1, col=2)
+        self._fig.add_trace(line_mesh_data, row=2, col=1)
 
     def show(self, i_event):
         self._init_fig()
