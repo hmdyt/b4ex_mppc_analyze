@@ -169,7 +169,7 @@ array([
 - 現在の設定で検出効率を計算する
 - chごとに計算された検出効率がreturnされる
 
-## TrackReconstructorBase
+# TrackReconstructorBase
 ### __init__(rootfile_path)
 - 引数となるrootfile_pathから上記のhit_array_genで作られたhit情報を読み込む
 
@@ -188,7 +188,7 @@ array([
 - png,htmlで保存する
 
 
-## MuonTrackReconstructor
+# MuonTrackReconstructor
 直線で通ったであろうイベントを見つける。そのイベントに条件をつけてみたいイベントを絞る
 ### __init__(rootfile_path, threshold_s)
 - threshold_s
@@ -234,3 +234,10 @@ hitしたピクセルの下の層とその次の層で、そのピクセルの�
 ### write_fig
 img_（ファイル名）_（何層以上なったか）＿layer_hits_(何個以上なったか)_hits_under_（何個以上が何層目より下か）_layerというディレクトリ名を作り、
 event(イベント番号).で.pngと.htmlで保存
+
+# FitPointMuonTrackReconstructor
+### __inti__, _precut_threshold, hit_muon_straight, write_fig 
+MuonTrackReconstructorと同じ
+
+### over_three_layer_from_upside
+上から3層を見て3層とも1hitのイベントを保存
