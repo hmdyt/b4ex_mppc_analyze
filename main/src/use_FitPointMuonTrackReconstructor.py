@@ -1,9 +1,10 @@
 from pyroot_easiroc.FitPointMuonTrackReconstructor import FitPointMuonTrackReconstructor
 from pyroot_easiroc.LayerVisualizer import LayerVisualizer
+from pyroot_easiroc.EffCalculatorUpDown import get_threshold
 from tqdm import tqdm
 
-rootfile_path = "/data/hamada/easiroc_data/run017.root"
-threshold_s = [1200] * 64
+rootfile_path = "~/run017_027.root"
+threshold_s = get_threshold()
 
 fpmtr = FitPointMuonTrackReconstructor(rootfile_path, threshold_s)
 
