@@ -1,10 +1,9 @@
 from pyroot_easiroc.FitPointMuonTrackReconstructor import FitPointMuonTrackReconstructor
+from pyroot_easiroc.LayerVisualizer import LayerVisualizer
 from tqdm import tqdm
 
 rootfile_path = "/data/hamada/easiroc_data/run017.root"
 threshold_s = [1200] * 64
-
-fpmtr = FitPointMuonTrackReconstructor(rootfile_path, threshold_s)
 
 fpmtr = FitPointMuonTrackReconstructor(rootfile_path, threshold_s)
 
@@ -19,7 +18,11 @@ fpmtr._select_continue_2_hits()
 
 # fit 
 for i_event in tqdm(range(len(fpmtr._select_continue_2_hits_index))):
-    #fpmtr._get_fit_point(fpmtr._select_continue_2_hits_index[i_event])
-    #fpmtr.fiting_func(fpmtr._param, fpmtr._x, fpmtr._y, fpmtr._z)
-    #fpmtr._get_fit_line_equition(fpmtr._select_continue_2_hits_index[i_event])
-    fpmtr.show(fpmtr._select_continue_2_hits_index[i_event])
+    fpmtr._get_fit_point(fpmtr._select_continue_2_hits_index[i_event])
+    fpmtr.fiting_func(fpmtr._param, fpmtr._x, fpmtr._y, fpmtr._z)
+    fpmtr._get_fit_line_equition(fpmtr._select_continue_2_hits_index[i_event])
+    fpmtr._init_fig()
+    fpmtr.draw_mesh(fpmtr._select_continue_2_hits_index[i_event])
+    fpmtr.draw_line([fpmtr._point_top[0], fpmtr._point_top[1], fpmtr._point_top[2]], [fpmtr._point_bottom[0], fpmtr._point_bottom[1], fpmtr._point_bottom[2]])
+    fpmtr.write_fig(fpmtr._select_continue_2_hits_index[i_event])
+    LayerVisualizer(fpmtr).write_fig()
