@@ -2,6 +2,23 @@ from typing import List
 import numpy as np
 import uproot
 
+def get_threshold():
+    threshold = [1300 for _ in range(64)]
+    threshold[1] = 1150
+    threshold[2] = 1000
+    threshold[4] = 1200
+    threshold[5] = 1150
+    threshold[11] = 1100
+    threshold[12] = 1200
+    threshold[14] = 1100
+    threshold[28] = 1100
+    threshold[35] = 1050
+    threshold[37] = 1000
+    threshold[57] = 1200
+    threshold[59] = 1200
+    threshold[61] = 1100
+    return threshold
+
 
 class EffCalculatorUpDown:
     CHANNELS_UPSIDE = np.array([[i for i in range(0 + (4 * layer), 4 + (4 * layer))] for layer in range(8)])
